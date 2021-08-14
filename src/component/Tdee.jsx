@@ -10,6 +10,7 @@ function Tdee() {
   const [bodyFat, setBodyFat] = useState(0);
   const [activityLevel, setActivityLevel] = useState(0);
   const [bmr,setBmr] = useState(0);
+  const [loading,setLoading] = useState(false);
 
   const onSubmit = () => {
     const newBmr = 21.6* (weight - ((bodyFat/100)*weight)) + 370
@@ -18,29 +19,33 @@ function Tdee() {
     setBmr(Math.round(newBmr*1000)/1000)
   };
   const uploadData = () => {
-
+    setLoading(true)
     if(tdee&&bmr&&fullname != 0 ){
         
-        firestore.collection("users").doc().set({
+        firestore.collection("test").doc().set({
             fullname: fullname,
             tdee:tdee,
             bmr:bmr
         })
         .then(() => {
             alert("Document successfully written!");
+            setLoading(false)
         })
         .catch((error) => {
             console.error("Error writing document: ", error);
+            setLoading(false)
         });
     }
     else{
         alert("Data Not Saved, Please Fill all the field")
+        setLoading(false)
     }
 
   }
   return (
     <div className="tdee">
       <h1>Total Daily Energy Expenditure</h1>
+        {loading ? "Uploading Data" : ""}
       <div className="tdee-button">
 
       </div>
@@ -81,7 +86,7 @@ function Tdee() {
         </div>
         <div className="tdee-buttons">
           <button onClick={onSubmit}>Calculate</button> 
-          <button onClick={uploadData}>Save Result</button>
+          <button onClick={uploadData}  disabled={loading}>Save Result</button>
         </div>
         <div>{tdee&&bmr ? <h3>TDEE : {tdee}   And   BMR : {bmr}</h3> : <h3> </h3>}</div>
       </div>
