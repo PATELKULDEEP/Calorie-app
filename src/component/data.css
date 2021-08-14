@@ -1,0 +1,13 @@
+.data-main{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+.data-main div{
+    margin: 5px;
+    padding: 2px;
+}
+.data-main div h1,h2{
+    margin: 5px;
+    padding-right: 10px;
+}
